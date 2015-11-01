@@ -7,6 +7,7 @@ var intersected;
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.z = 50;
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(new THREE.Color(0xeeeeee));
@@ -16,7 +17,6 @@ document.body.appendChild(renderer.domElement);
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 var geometry = new THREE.CubeGeometry(1,1,1);
-var material = new THREE.MeshPhongMaterial({color: baseColor});
 
 var cubes = [];
 var margin = 0.2;
@@ -34,8 +34,6 @@ for(var i=0;i<10;i++) {
         }
     }
 }  
-
-camera.position.z = 50;
 
 var light    = new THREE.AmbientLight('#888888', 0.01);
 scene.add(light);
@@ -62,7 +60,10 @@ var onMouseClick = function(e) {
         if(intersected != intersections[0].object) {
             if(intersected) intersected.material.color.setHex(baseColor);
             intersected = intersections[0].object;
+            /*
             intersected.material.color.setHex(intersectColor);
+            */
+            scene.remove(intersected);
         }
     } else if(intersected) {
         intersected.material.color.setHex(baseColor);
