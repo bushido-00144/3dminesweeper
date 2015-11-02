@@ -19,6 +19,7 @@ controls = new THREE.OrbitControls(camera, renderer.domElement);
 var geometry = new THREE.CubeGeometry(1,1,1);
 
 var cubes = [];
+var grids = {};
 var margin = 0.2;
 
 for(var i=0;i<10;i++) {
@@ -31,6 +32,7 @@ for(var i=0;i<10;i++) {
             cubes[i][j][k].castShadow = true;
             cubes[i][j][k].receiveShadow = true;
             scene.add(cubes[i][j][k]);
+            grids[cubes[i][j][k].uuid] = new GRID(i, j, k, false);
         }
     }
 }  
@@ -62,8 +64,9 @@ var onMouseClick = function(e) {
             intersected = intersections[0].object;
             /*
             intersected.material.color.setHex(intersectColor);
-            */
             scene.remove(intersected);
+            */
+            dig(intersected.uuid);
         }
     } else if(intersected) {
         intersected.material.color.setHex(baseColor);
