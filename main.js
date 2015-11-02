@@ -37,6 +37,8 @@ for(var i=0;i<10;i++) {
     }
 }  
 
+genMine();
+
 var light    = new THREE.AmbientLight('#888888', 0.01);
 scene.add(light);
 

@@ -9,6 +9,19 @@ function GRID(x, y, z, isMine) {
     return this;
 }
 
+function genMine() {
+    for(var i=0;i<MINENUM;i++) {
+        var randX = Math.floor(Math.random()*GRIDNUM)+1;
+        var randY = Math.floor(Math.random()*GRIDNUM)+1;
+        var randZ = Math.floor(Math.random()*GRIDNUM)+1;
+        if(grids[cubes[randX][randY][randZ].uuid].isMine) {
+            i--;
+        } else {
+            grids[cubes[randX][randY][randZ].uuid].isMine = true;
+        }
+    }
+}
+
 function dig(uuid) {
     if(grids[uuid].isMine) gameover();
     var numMine = searchMine(uuid);
@@ -20,6 +33,8 @@ function dig(uuid) {
         for(var i=0;i<numSurroundGrids;i++) {
             dig(surroundGridUuids[i]);
         }
+        grids[uuid].deleteFlag = true;
+        scene.remove(cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z]);
     }
 }
 
