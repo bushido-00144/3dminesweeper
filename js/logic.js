@@ -11,9 +11,9 @@ function GRID(x, y, z, isMine) {
 
 function genMine() {
     for(var i=0;i<MINENUM;i++) {
-        var randX = Math.floor(Math.random()*GRIDNUM)+1;
-        var randY = Math.floor(Math.random()*GRIDNUM)+1;
-        var randZ = Math.floor(Math.random()*GRIDNUM)+1;
+        var randX = Math.floor(Math.random()*GRIDNUM);
+        var randY = Math.floor(Math.random()*GRIDNUM);
+        var randZ = Math.floor(Math.random()*GRIDNUM);
         if(grids[cubes[randX][randY][randZ].uuid].isMine) {
             i--;
         } else {
@@ -23,10 +23,14 @@ function genMine() {
 }
 
 function dig(uuid) {
+    if(grids[uuid].deleteFlag) return;
     if(grids[uuid].isMine) gameover();
     var numMine = searchMine(uuid);
     if(numMine > 0) {
         //creaete number sprite
+        console.log("this is MINE");
+        grids[uuid].deleteFlag = true;
+        scene.remove(cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z]);
     } else {
         var surroundGridUuids = getSurroundIndexes(uuid);
         var numSurroundGrids = surroundGridUuids.length;
@@ -42,11 +46,11 @@ function getSurroundIndexes(uuid) {
     var uuids = [];
     var gridPos = grids[uuid].pos;
     var min_x = (gridPos.x>0)? gridPos.x-1 : 0;
-    var max_x = (gridPos.x<GRIDNUM)? gridPos.x+1 : GRIDNUM;
+    var max_x = (gridPos.x<GRIDNUM-1)? gridPos.x+1 : GRIDNUM-1;
     var min_y = (gridPos.y>0)? gridPos.y-1 : 0;
-    var max_y = (gridPos.y<GRIDNUM)? gridPos.y+1 : GRIDNUM;
+    var max_y = (gridPos.y<GRIDNUM-1)? gridPos.y+1 : GRIDNUM-1;
     var min_z = (gridPos.z>0)? gridPos.z-1 : 0;
-    var max_z = (gridPos.z<GRIDNUM)? gridPos.z+1 : GRIDNUM;
+    var max_z = (gridPos.z<GRIDNUM-1)? gridPos.z+1 : GRIDNUM-1;
     for(var i=min_x;i<=max_x;i++) {
         for(var j=min_y;j<=max_y;j++) {
             for(var k=min_z;k<=max_z;k++) {
@@ -68,3 +72,7 @@ function searchMine(uuid) {
     }
     return count;
 }
+
+function gameover() {
+    alert("Game Over!!");
+};

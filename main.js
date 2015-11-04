@@ -1,3 +1,6 @@
+var MINENUM = 10;
+var GRIDNUM = 10;
+
 var baseColor = 0x98fb98;
 var intersectColor = 0xfafa98;
 
@@ -22,11 +25,11 @@ var cubes = [];
 var grids = {};
 var margin = 0.2;
 
-for(var i=0;i<10;i++) {
+for(var i=0;i<GRIDNUM;i++) {
     cubes[i] = [];
-    for(var j=0;j<10;j++) {
+    for(var j=0;j<GRIDNUM;j++) {
         cubes[i][j] = [];
-        for(var k=0;k<10;k++) {
+        for(var k=0;k<GRIDNUM;k++) {
             cubes[i][j][k] = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color:baseColor}));
             cubes[i][j][k].position.set(i+i*margin,j+j*margin,k+k*margin);
             cubes[i][j][k].castShadow = true;
