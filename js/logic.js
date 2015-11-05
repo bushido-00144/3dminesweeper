@@ -1,4 +1,3 @@
-
 function GRID(x, y, z, isMine) {
     this.isMine = isMine;
     this.surroundMine = 0;
@@ -37,7 +36,10 @@ function dig(uuid) {
             height : 0.1,
             font : "optimer",
         });
-        numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({color:numberColor})));
+        numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({
+                color:numberColor,
+                transparent : true,
+                opacity : 0.5})));
         numObjects[numObjects.length-1].position.set(cubepos.x,cubepos.y,cubepos.z);
         scene.add(numObjects[numObjects.length-1]);
     } else {
@@ -54,7 +56,10 @@ function dig(uuid) {
                     height : 0.1,
                     font : "optimer",
                 });
-                numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({color:numberColor})));
+                numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({
+                    color:numberColor,
+                    transparent : true,
+                    opacity : 0.5})));
                 numObjects[numObjects.length-1].position.set(cubepos.x,cubepos.y,cubepos.z);
                 scene.add(numObjects[numObjects.length-1]);
             } else {
@@ -65,10 +70,13 @@ function dig(uuid) {
                             [grids[surroundGridUuids[i]].pos.x]
                             [grids[surroundGridUuids[i]].pos.y]
                             [grids[surroundGridUuids[i]].pos.z]);
+            GRIDSUM--;
         }
     }
     grids[uuid].deleteFlag = true;
     scene.remove(cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z]);
+    GRIDSUM--;
+    if(GRIDSUM === MINENUM) gameclear();
 
 }
 
@@ -105,4 +113,8 @@ function searchMine(uuid) {
 
 function gameover() {
     alert("Game Over!!");
-};
+}
+
+function gameclear() {
+    alert("Game clear!!");
+}

@@ -1,9 +1,16 @@
 var MINENUM = 80;
 var GRIDNUM = 10;
+var GRIDSUM = GRIDNUM * GRIDNUM * GRIDNUM;
+var GRIDSIZE = 1;
 
-var baseColor = 0x98fb98;
+var baseColor = 0x778899;
+var flagColor = 0xffa500;
 var intersectColor = 0xfafa98;
 var numberColor = 0x000080;
+
+var lightPositions = [
+    { x : 0, y : 10, z : 10},
+    { x : 0, y : -10, z : -10}];
 
 var mouse = new THREE.Vector2();
 var raycaster = new THREE.Raycaster();
@@ -11,7 +18,7 @@ var intersected;
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.z = 50;
+camera.position.set(15, 10, 15);
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(new THREE.Color(0xeeeeee));
@@ -20,18 +27,18 @@ document.body.appendChild(renderer.domElement);
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-var geometry = new THREE.CubeGeometry(1,1,1);
-
-var textGeometry = new THREE.TextGeometry("1", {
-        size:1,
-        height : 1,
-        font : "optimer",
-});
+var geometry = new THREE.CubeGeometry(GRIDSIZE, GRIDSIZE, GRIDSIZE);
 
 var cubes = [];
 var grids = {};
 var numObjects = [];
-var margin = 0.2;
+var lights = [];
+var margin = 0.4;
+var offset = {
+        x : (GRIDNUM * (GRIDSIZE + margin) - margin) / 2,
+        y : (GRIDNUM * (GRIDSIZE + margin) - margin) / 2,
+        z : (GRIDNUM * (GRIDSIZE + margin) - margin) / 2
+};
 
 for(var i=0;i<GRIDNUM;i++) {
     cubes[i] = [];
@@ -39,7 +46,7 @@ for(var i=0;i<GRIDNUM;i++) {
         cubes[i][j] = [];
         for(var k=0;k<GRIDNUM;k++) {
             cubes[i][j][k] = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color:baseColor}));
-            cubes[i][j][k].position.set(i+i*margin,j+j*margin,k+k*margin);
+            cubes[i][j][k].position.set(i+i*margin-offset.x,j+j*margin-offset.y,k+k*margin-offset.z);
             cubes[i][j][k].castShadow = true;
             cubes[i][j][k].receiveShadow = true;
             scene.add(cubes[i][j][k]);
@@ -53,15 +60,27 @@ _.each(grids, function(grid, uuid) {
     grid.surroundMine = searchMine(uuid);
 });
 
-var light    = new THREE.AmbientLight('#888888', 0.01);
-scene.add(light);
+var envLight    = new THREE.AmbientLight('#ffffff', 0.01);
+scene.add(envLight);
 
-var dlight    = new THREE.DirectionalLight('#ffffff', 1);
-dlight.position.set(100,200,100);
-dlight.castShadow = true;
-scene.add(dlight);
+_.each(lightPositions, function(pos) {
+    lights.push(new THREE.DirectionalLight('#ffffff', 0.3));
+    lights[lights.length-1].position.set(pos.x, pos.y, pos.z);
+    lights[lights.length-1].castShadow = true;
+    scene.add(lights[lights.length-1]);
+});
 
 var render = function() {
+    _.each(numObjects, function(obj) {
+        obj.rotation.x = camera.rotation.x;
+        obj.rotation.y = camera.rotation.y;
+        obj.rotation.z = camera.rotation.z;
+        if(obj.position.distanceTo(camera.position)>10) {
+            obj.material.visible = false;
+        } else {
+            obj.material.visible = true;
+        }
+    });
     requestAnimationFrame(render);
     renderer.render(scene, camera);
 };
@@ -82,6 +101,7 @@ var onMouseClick = function(e) {
             intersected.material.color.setHex(intersectColor);
             scene.remove(intersected);
             */
+            if(!grids[intersected.uuid]) return;
             dig(intersected.uuid);
         }
     } else if(intersected) {
@@ -90,10 +110,10 @@ var onMouseClick = function(e) {
     }
 };
 
-/*
 var raycaster2 = new THREE.Raycaster();
-var intersected2;
-var onMouseMove = function(e) {
+var flagOn = function(e) {
+        console.log(e);
+    if(!e.shiftKey) return;
     mouse.x = (e.clientX/window.innerWidth) *2 - 1;
     mouse.y =-(e.clientY/window.innerHeight)*2 + 1;
 
@@ -102,21 +122,11 @@ var onMouseMove = function(e) {
     var intersections = raycaster2.intersectObjects(scene.children);
 
     if(intersections.length > 0) {
-        if(intersected2 != intersections[0].object) {
-            if(intersected2) intersected.material.color.setHex(baseColor);
-            intersected2 = intersections[0].object;
-            console.log(searchMine(intersected2.uuid));
-        }
-    } else if(intersected2) {
-        intersected2.material.color.setHex(baseColor);
-        intersected2 = null;
+         intersections[0].object.material.color.setHex(flagColor);
     }
 };
-*/
 
 window.addEventListener("dblclick", onMouseClick, false);
-/*
-window.addEventListener("mousemove", onMouseMove, false);
-*/
+window.addEventListener("keydown", flagOn, false);
 
 render();
