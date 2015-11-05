@@ -49,6 +49,9 @@ for(var i=0;i<GRIDNUM;i++) {
 }  
 
 genMine();
+_.each(grids, function(grid, uuid) {
+    grid.surroundMine = searchMine(uuid);
+});
 
 var light    = new THREE.AmbientLight('#888888', 0.01);
 scene.add(light);
@@ -116,13 +119,4 @@ window.addEventListener("dblclick", onMouseClick, false);
 window.addEventListener("mousemove", onMouseMove, false);
 */
 
-//test
-var textGeometry = new THREE.TextGeometry("1", {
-        size:1,
-        height : 1,
-        font : "optimer",
-});
-var text3d = new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({color:baseColor}));
-text3d.position.set(50,0,0);
-scene.add(text3d);
 render();
