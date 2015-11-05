@@ -1,3 +1,5 @@
+var diggedGrids = [];
+
 function GRID(x, y, z, isMine) {
     this.isMine = isMine;
     this.deleteFlag = false;
@@ -25,21 +27,51 @@ function genMine() {
 function dig(uuid) {
     if(grids[uuid].deleteFlag) return;
     if(grids[uuid].isMine) gameover();
+    diggedGrids.push(uuid);
     var numMine = searchMine(uuid);
+    var cubepos;
     if(numMine > 0) {
         //creaete number sprite
-        console.log("this is MINE");
-        grids[uuid].deleteFlag = true;
-        scene.remove(cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z]);
+        cubepos = cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z].position;
+        var textGeometry = new THREE.TextGeometry(String(numMine), {
+            size:1,
+            height : 0.1,
+            font : "optimer",
+        });
+        numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({color:numberColor})));
+        numObjects[numObjects.length-1].position.set(cubepos.x,cubepos.y,cubepos.z);
+        scene.add(numObjects[numObjects.length-1]);
     } else {
         var surroundGridUuids = getSurroundIndexes(uuid);
-        var numSurroundGrids = surroundGridUuids.length;
-        for(var i=0;i<numSurroundGrids;i++) {
-            dig(surroundGridUuids[i]);
+        for(var i=0;i<surroundGridUuids.length;i++) {
+            var tmpuuid = surroundGridUuids[i];
+            if(grids[tmpuuid].deleteFlag) continue;
+            diggedGrids.push(tmpuuid);
+            var tmpGridMines = searchMine(tmpuuid);
+            if(tmpGridMines > 0) {
+                //create number sprite
+                cubepos = cubes[grids[tmpuuid].pos.x][grids[tmpuuid].pos.y][grids[tmpuuid].pos.z].position;
+                var textGeometry = new THREE.TextGeometry(String(tmpGridMines), {
+                    size:1,
+                    height : 0.1,
+                    font : "optimer",
+                });
+                numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({color:numberColor})));
+                numObjects[numObjects.length-1].position.set(cubepos.x,cubepos.y,cubepos.z);
+                scene.add(numObjects[numObjects.length-1]);
+            } else {
+                Array.prototype.push.apply(surroundGridUuids, getSurroundIndexes(surroundGridUuids[i]));
+//                surroundGridUuids = _.difference(surroundGridUuids, diggedGrids);
+            }
+            grids[surroundGridUuids[i]].deleteFlag = true;
+            scene.remove(cubes
+                            [grids[surroundGridUuids[i]].pos.x]
+                            [grids[surroundGridUuids[i]].pos.y]
+                            [grids[surroundGridUuids[i]].pos.z]);
         }
-        grids[uuid].deleteFlag = true;
-        scene.remove(cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z]);
     }
+    grids[uuid].deleteFlag = true;
+    scene.remove(cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z]);
 }
 
 function getSurroundIndexes(uuid) {

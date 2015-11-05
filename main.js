@@ -1,8 +1,9 @@
-var MINENUM = 10;
+var MINENUM = 80;
 var GRIDNUM = 10;
 
 var baseColor = 0x98fb98;
 var intersectColor = 0xfafa98;
+var numberColor = 0x000080;
 
 var mouse = new THREE.Vector2();
 var raycaster = new THREE.Raycaster();
@@ -21,8 +22,15 @@ controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 var geometry = new THREE.CubeGeometry(1,1,1);
 
+var textGeometry = new THREE.TextGeometry("1", {
+        size:1,
+        height : 1,
+        font : "optimer",
+});
+
 var cubes = [];
 var grids = {};
+var numObjects = [];
 var margin = 0.2;
 
 for(var i=0;i<GRIDNUM;i++) {
@@ -79,6 +87,42 @@ var onMouseClick = function(e) {
     }
 };
 
-window.addEventListener("dblclick", onMouseClick, false);
+/*
+var raycaster2 = new THREE.Raycaster();
+var intersected2;
+var onMouseMove = function(e) {
+    mouse.x = (e.clientX/window.innerWidth) *2 - 1;
+    mouse.y =-(e.clientY/window.innerHeight)*2 + 1;
 
+    raycaster2.setFromCamera(mouse, camera);
+
+    var intersections = raycaster2.intersectObjects(scene.children);
+
+    if(intersections.length > 0) {
+        if(intersected2 != intersections[0].object) {
+            if(intersected2) intersected.material.color.setHex(baseColor);
+            intersected2 = intersections[0].object;
+            console.log(searchMine(intersected2.uuid));
+        }
+    } else if(intersected2) {
+        intersected2.material.color.setHex(baseColor);
+        intersected2 = null;
+    }
+};
+*/
+
+window.addEventListener("dblclick", onMouseClick, false);
+/*
+window.addEventListener("mousemove", onMouseMove, false);
+*/
+
+//test
+var textGeometry = new THREE.TextGeometry("1", {
+        size:1,
+        height : 1,
+        font : "optimer",
+});
+var text3d = new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({color:baseColor}));
+text3d.position.set(50,0,0);
+scene.add(text3d);
 render();
