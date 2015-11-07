@@ -1,3 +1,5 @@
+var HEIGHT = window.innerHeight * 0.8;
+var WIDTH  = window.innerWidth * 0.8;
 var MINENUM  = 80;
 var GRIDNUM  = 10;
 var GRIDSIZE = 2;
@@ -38,7 +40,8 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(new THREE.Color(0xeeeeee));
 renderer.shadowMapEnabled = true;
-document.body.appendChild(renderer.domElement);
+//document.body.appendChild(renderer.domElement);
+document.getElementById("screen").appendChild(renderer.domElement);
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -143,7 +146,13 @@ var flagOn = function(e) {
     }
 };
 
+function showMainMenu(e) {
+    if(e.keyCode!==27) return;
+    $('#main_menu').modal();
+}
+
 window.addEventListener("dblclick", onMouseClick, false);
 window.addEventListener("click", flagOn, false);
+window.addEventListener("keydown", showMainMenu, false);
 
 render();
