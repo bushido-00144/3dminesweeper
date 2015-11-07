@@ -1,5 +1,3 @@
-var HEIGHT = window.innerHeight * 0.8;
-var WIDTH  = window.innerWidth * 0.8;
 var MINENUM  = 80;
 var GRIDNUM  = 10;
 var GRIDSIZE = 2;
