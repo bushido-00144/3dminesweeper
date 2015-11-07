@@ -3,6 +3,19 @@ var GRIDNUM = 10;
 var GRIDSUM = GRIDNUM * GRIDNUM * GRIDNUM;
 var GRIDSIZE = 1;
 
+var param = location.search.substring(1).split('&');
+var params = {};
+if(param.length > 1) {
+    for(var i=0;i<param.length;i++) {
+        var element  =param[i].split('=');
+        var paramName = decodeURI(element[0]);
+        var paramValue= decodeURI(element[1]);
+        params[paramName] = paramValue;
+    }
+    MINENUM = params.minenum;
+    GRIDNUM = params.gridnum;
+}
+
 var baseColor = 0x778899;
 var flagColor = 0xffa500;
 var intersectColor = 0xfafa98;
