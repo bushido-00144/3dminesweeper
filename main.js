@@ -45,8 +45,23 @@ document.getElementById("screen").appendChild(renderer.domElement);
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-var geometry = new THREE.CubeGeometry(GRIDSIZE, GRIDSIZE, GRIDSIZE);
+var valueNode;
+var valueDiv = document.createElement( 'div' );
+valueDiv.style.position = 'absolute';
+valueDiv.style.top = '0px';
+valueDiv.style.right = String(window.innerWidth/4)+'px';
+valueDiv.style.width = '500px';
+valueDiv.style.height = '300px';
+valueDiv.style.fontSize = '60px';
+document.getElementById("screen").appendChild( valueDiv );
+valueNode = document.createTextNode( '' );
+valueDiv.appendChild( valueNode );
+function setTextNode() {
+    valueNode.nodeValue = "Mines:"+String(MINENUM-flagedGrids);
+}
+setTextNode();
 
+var geometry = new THREE.CubeGeometry(GRIDSIZE, GRIDSIZE, GRIDSIZE);
 var cubes = [];
 var grids = {};
 var numObjects = [];
@@ -139,9 +154,11 @@ var flagOn = function(e) {
         if(intersections[0].object.material.color.getHex() === baseColor){ 
             intersections[0].object.material.color.setHex(flagColor);
             flagedGrids++;
+            setTextNode();
         } else {
             intersections[0].object.material.color.setHex(baseColor);
             flagedGrids--;
+            setTextNode();
         }
     }
 };
