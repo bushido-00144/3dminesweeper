@@ -1,7 +1,8 @@
-var MINENUM = 80;
-var GRIDNUM = 10;
-var GRIDSUM = GRIDNUM * GRIDNUM * GRIDNUM;
-var GRIDSIZE = 1;
+var MINENUM  = 80;
+var GRIDNUM  = 10;
+var GRIDSIZE = 2;
+var STRSIZE  = 1;
+var flagedGrids = 0;
 
 var param = location.search.substring(1).split('&');
 var params = {};
@@ -12,9 +13,10 @@ if(param.length > 1) {
         var paramValue= decodeURI(element[1]);
         params[paramName] = paramValue;
     }
-    MINENUM = params.minenum;
+    MINENUM = Number(params.minenum);
     GRIDNUM = params.gridnum;
 }
+var GRIDSUM  = GRIDNUM * GRIDNUM * GRIDNUM;
 
 var baseColor = 0x778899;
 var flagColor = 0xffa500;
@@ -46,7 +48,7 @@ var cubes = [];
 var grids = {};
 var numObjects = [];
 var lights = [];
-var margin = 0.4;
+var margin = 2;
 var offset = {
         x : (GRIDNUM * (GRIDSIZE + margin) - margin) / 2,
         y : (GRIDNUM * (GRIDSIZE + margin) - margin) / 2,
@@ -88,7 +90,7 @@ var render = function() {
         obj.rotation.x = camera.rotation.x;
         obj.rotation.y = camera.rotation.y;
         obj.rotation.z = camera.rotation.z;
-        if(obj.position.distanceTo(camera.position)>10) {
+        if(obj.position.distanceTo(camera.position)>GRIDSIZE*10) {
             obj.material.visible = false;
         } else {
             obj.material.visible = true;
@@ -110,10 +112,6 @@ var onMouseClick = function(e) {
         if(intersected != intersections[0].object) {
             if(intersected) intersected.material.color.setHex(baseColor);
             intersected = intersections[0].object;
-            /*
-            intersected.material.color.setHex(intersectColor);
-            scene.remove(intersected);
-            */
             if(!grids[intersected.uuid]) return;
             dig(intersected.uuid);
         }
@@ -125,7 +123,6 @@ var onMouseClick = function(e) {
 
 var raycaster2 = new THREE.Raycaster();
 var flagOn = function(e) {
-        console.log(e);
     if(!e.shiftKey) return;
     mouse.x = (e.clientX/window.innerWidth) *2 - 1;
     mouse.y =-(e.clientY/window.innerHeight)*2 + 1;
@@ -135,11 +132,18 @@ var flagOn = function(e) {
     var intersections = raycaster2.intersectObjects(scene.children);
 
     if(intersections.length > 0) {
-         intersections[0].object.material.color.setHex(flagColor);
+        if(!grids[intersections[0].object.uuid]) return;
+        if(intersections[0].object.material.color.getHex() === baseColor){ 
+            intersections[0].object.material.color.setHex(flagColor);
+            flagedGrids++;
+        } else {
+            intersections[0].object.material.color.setHex(baseColor);
+            flagedGrids--;
+        }
     }
 };
 
 window.addEventListener("dblclick", onMouseClick, false);
-window.addEventListener("keydown", flagOn, false);
+window.addEventListener("click", flagOn, false);
 
 render();

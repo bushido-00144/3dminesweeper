@@ -32,9 +32,9 @@ function dig(uuid) {
         //creaete number sprite
         cubepos = cubes[grids[uuid].pos.x][grids[uuid].pos.y][grids[uuid].pos.z].position;
         var textGeometry = new THREE.TextGeometry(String(numMine), {
-            size:1,
+            size   : STRSIZE,
             height : 0.1,
-            font : "optimer",
+            font   : "optimer",
         });
         numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({
                 color:numberColor,
@@ -52,9 +52,9 @@ function dig(uuid) {
                 //create number sprite
                 cubepos = cubes[grids[tmpuuid].pos.x][grids[tmpuuid].pos.y][grids[tmpuuid].pos.z].position;
                 var textGeometry = new THREE.TextGeometry(String(tmpGridMines), {
-                    size:1,
+                    size   : STRSIZE,
                     height : 0.1,
-                    font : "optimer",
+                    font   : "optimer",
                 });
                 numObjects.push(new THREE.Mesh(textGeometry, new THREE.MeshPhongMaterial({
                     color:numberColor,
