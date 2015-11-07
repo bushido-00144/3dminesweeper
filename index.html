@@ -1,9 +1,18 @@
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>MineSweeper</title>
-        <style>canvas { width: 100%; height: 100%; color: 0xffffff }</style>
+        <link href="./css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
+        <div id="screen">
+        <style>canvas { width: 50%; height: 50%; color: 0xffffff }</style>
+        <style>.modal-dialog-center {padding-top: 10%;}</style>
+        </div>
+        <script src="./lib/jquery-1.11.3.min.js"></script>
+        <script src="./lib/bootstrap.min.js"></script>
         <script src="./lib/lodash.js"></script>
         <script src="./lib/three.min.js"></script>
         <script src="./lib/FontUtils.js"></script>
@@ -13,5 +22,62 @@
         <script src="./lib/OrbitControls.js"></script>
         <script src="./js/logic.js"></script>
         <script src="./main.js"></script>
+        <div class="modal" id="main_menu">
+            <div class="modal-dialog modal-dialog-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">3D-MineSweeper</h4>
+                    </div>
+                    <div class="modal-body">
+                            <h4><b>操作方法</b></h4>
+                         ・左クリックしながらドラッグ：視点を回す<br>
+                         ・右クリックしながらドラッグ：視点を移動する<br>
+                         ・スクロール：視点を近づける/遠ざける<br>
+                         ・シフトキー押しながら左クリック：フラグをつける<br>
+                         ・エスケープキー：メニュー表示<br>
+                         <h4><b>難易度を変えて最初から</b></h4>
+                        <script>
+                            var contents = "<a href=\"http://" + location.hostname + location.pathname + "?gridnum=4&minenum=2\"" + "class=\"btn btn-success\">Easy</a> ";
+                               contents += "<a href=\"http://" + location.hostname + location.pathname + "?gridnum=6&minenum=10\"" + "class=\"btn btn-primary\">Normal</a> ";
+                               contents += "<a href=\"http://" + location.hostname + location.pathname + "?gridnum=10&minenum=80\"" + "class=\"btn btn-warning\">Hard</a>";
+                            document.write(contents);
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal" id="gameover_dialog">
+            <div class="modal-dialog modal-dialog-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Game Over...</h4>
+                    </div>
+                    <div class="modal-body">
+                        <script>
+                            var contents = "<a href=\"" + location.href + "\"class=\"btn btn-success\">Retry</a> ";
+                            document.write(contents);
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="gameclear_dialog">
+            <div class="modal-dialog modal-dialog-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Game Clear!!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <script>
+                            var contents = "<a href=\"" + location.href + "class=\"btn btn-success\">Retry</a> ";
+                            document.write(contents);
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

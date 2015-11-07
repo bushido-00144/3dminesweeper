@@ -112,9 +112,9 @@ function searchMine(uuid) {
 }
 
 function gameover() {
-    alert("Game Over!!");
+    $('#gameover_dialog').modal();
 }
 
 function gameclear() {
-    alert("Game clear!!");
+    $('#gameclear_dialog').modal();
 }
