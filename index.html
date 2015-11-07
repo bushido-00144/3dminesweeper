@@ -36,9 +36,9 @@
                          ・エスケープキー：メニュー表示<br>
                          <h4><b>難易度を変えて最初から</b></h4>
                         <script>
-                            var contents = "<a href=\"http://" + location.hostname + location.pathname + "?gridnum=4&minenum=8\"" + "class=\"btn btn-success\">Easy</a> ";
-                               contents += "<a href=\"http://" + location.hostname + location.pathname + "?gridnum=6&minenum=20\"" + "class=\"btn btn-primary\">Normal</a> ";
-                               contents += "<a href=\"http://" + location.hostname + location.pathname + "?gridnum=10&minenum=80\"" + "class=\"btn btn-warning\">Hard</a>";
+                            var contents = "<a href=\"" + location.protocol + "//" + location.hostname + location.pathname + "?gridnum=4&minenum=8\"" + "class=\"btn btn-success\">Easy</a> ";
+                               contents += "<a href=\"" + location.protocol + "//" + location.hostname + location.pathname + "?gridnum=6&minenum=20\"" + "class=\"btn btn-primary\">Normal</a> ";
+                               contents += "<a href=\"" + location.protocol + "//" + location.hostname + location.pathname + "?gridnum=10&minenum=80\"" + "class=\"btn btn-warning\">Hard</a>";
                             document.write(contents);
                         </script>
                     </div>
