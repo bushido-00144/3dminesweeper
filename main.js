@@ -1,5 +1,5 @@
-var MINENUM  = 80;
-var GRIDNUM  = 10;
+var MINENUM  = 8;
+var GRIDNUM  = 4;
 var GRIDSIZE = 2;
 var STRSIZE  = 1;
 var flagedGrids = 0;
@@ -50,7 +50,7 @@ valueDiv.style.top = '0px';
 valueDiv.style.right = '200px';
 valueDiv.style.width = '0px';
 valueDiv.style.height = '100px';
-valueDiv.style.fontSize = '50px';
+valueDiv.style.fontSize = '30px';
 document.getElementById("screen").appendChild( valueDiv );
 valueNode = document.createTextNode( '' );
 valueDiv.appendChild( valueNode );
