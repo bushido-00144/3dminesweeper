@@ -65,6 +65,7 @@ function dig(uuid) {
             } else {
                 Array.prototype.push.apply(surroundGridUuids, getSurroundIndexes(surroundGridUuids[i]));
             }
+            if(grids[surroundGridUuids[i]].deleteFlag) continue;
             grids[surroundGridUuids[i]].deleteFlag = true;
             scene.remove(cubes
                             [grids[surroundGridUuids[i]].pos.x]
